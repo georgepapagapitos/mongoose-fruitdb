@@ -19,7 +19,7 @@ const fruitSchema = new mongoose.Schema({
 
 const Fruit = mongoose.model('Fruit', fruitSchema);
 
-/** These will fail because of the validation above **/
+/****** These will fail because of the validation above ******/
 
 const pineapple = new Fruit({
   name: 'Pineapple',
@@ -43,6 +43,15 @@ const peach = new Fruit({
 //     console.log(err);
 //   } else {
 //     console.log('successfully updated the document');
+//   }
+// });
+
+/** DELETE A DB ENTRY **/
+// Fruit.deleteOne({ _id: "609d58f1f940510020987e98" }, function (err) {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log(`successfully deleted item from db`);
 //   }
 // });
 
