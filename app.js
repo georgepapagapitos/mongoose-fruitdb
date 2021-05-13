@@ -1,56 +1,84 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 
-const uri = "mongodb+srv://user:howdy@cluster0.vqhpz.mongodb.net/fruitsDB?retryWrites=true&w=majority";
-
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const fruitSchema = new mongoose.Schema({
   name: String,
-  rating: Number,
+  rating: {
+    type: Number,
+    min: 1,
+    max: 10
+  },
   review: String
 });
 
 const Fruit = mongoose.model('Fruit', fruitSchema);
 
-const fruit = new Fruit({
-  name: 'Kiwi',
-  rating: 9,
-  review: 'Very tasty fruit'
-});
+// FOR REFERENCE:
 
-fruit.save();
+// const kiwi = new Fruit({
+//   name: 'Kiwi',
+//   rating: 9,
+//   review: 'Very tasty fruit'
+// });
 
-Fruit.find(function (error, result) {
-  if (error) {
-    throw new Error('error searching db');
+// const orange = new Fruit({
+//   name: 'Orange',
+//   rating: 3,
+//   review: "Inconsistent"
+// });
+
+// const banana = new Fruit({
+//   name: 'Banana',
+//   rating: 7,
+//   review: 'Not the best texture'
+// });
+
+// const apple = new Fruit({
+//   name: 'Apple',
+//   rating: 8,
+//   review: 'Crispy apples are the best'
+// });
+
+// Fruit.insertMany([kiwi, orange, banana, apple], function (err) {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log('successfully saved the fruits to the db');
+//   }
+// });
+
+Fruit.find(function (err, fruits) {
+  if (err) {
+    console.log(err)
   } else {
-    for (fruit of result) {
-      console.log(fruit.name)
-    }
+    mongoose.connection.close();
+    fruits.forEach(fruit => console.log(fruit.name));
   }
-  mongoose.connection.close();
 });
 
+// EXAMPLE FOR REFERENCE:
 
-const personSchema = new mongoose.Schema({
-  name: String,
-  age: Number
-});
+// const personSchema = new mongoose.Schema({
+//   name: String,
+//   age: Number
+// });
 
-const Person = mongoose.model('Person', personSchema);
+// const Person = mongoose.model('Person', personSchema);
 
-const person = new Person({
-  name: "George",
-  age: 31
-});
+// const person = new Person({
+//   name: "George",
+//   age: 31
+// });
 
-person.save();
+// person.save();
 
-Person.find(function (error, result) {
-  if (error) {
-    throw new Error('error searching db');
-  } else {
-    console.log(result);
-  }
-  mongoose.connection.close();
-});
+// Person.find(function (error, result) {
+//   if (error) {
+//     throw new Error('error searching db');
+//   } else {
+//     console.log(result);
+//   }
+//   mongoose.connection.close();
+// });
