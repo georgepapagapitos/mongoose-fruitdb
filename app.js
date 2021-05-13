@@ -100,19 +100,45 @@ const peach = new Fruit({
 
 
 /** CREATE A PERSON MODEL AND ADD TO PERSON COLLECTION **/
-// const personSchema = new mongoose.Schema({
-//   name: String,
-//   age: Number
-// });
+const personSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  favoriteFruit: fruitSchema
+});
 
-// const Person = mongoose.model('Person', personSchema);
+const Person = mongoose.model('Person', personSchema);
 
-// const person = new Person({
-//   name: "George",
-//   age: 31
-// });
+const strawberry = new Fruit({
+  name: 'Strawberry',
+  rating: 9,
+  review: 'Great fruit'
+});
 
-// person.save();
+// strawberry.save();
+
+const mango = new Fruit({
+  name: 'Mango',
+  rating: 10,
+  review: 'Best fruit'
+});
+
+// mango.save();
+
+Person.updateOne({ "name": "George" }, { favoriteFruit: mango }, function (err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('updated favorite fruit');
+  }
+});
+
+const hannah = new Person({
+  name: 'Hannah',
+  age: 27,
+  favoriteFruit: strawberry
+});
+
+// hannah.save();
 
 // Person.find(function (error, result) {
 //   if (error) {
