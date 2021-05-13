@@ -1,10 +1,14 @@
 require('dotenv').config();
+const assert = require('assert');
 const mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const fruitSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required: [true, 'Fruit name is required!']
+  },
   rating: {
     type: Number,
     min: 1,
@@ -15,8 +19,34 @@ const fruitSchema = new mongoose.Schema({
 
 const Fruit = mongoose.model('Fruit', fruitSchema);
 
-// FOR REFERENCE:
+/** These will fail because of the validation above **/
 
+const pineapple = new Fruit({
+  name: 'Pineapple',
+  rating: 34,
+  review: 'GOAT'
+});
+
+const peach = new Fruit({
+  rating: 8,
+  review: 'Peaches are the best!'
+})
+
+// pineapple.save();
+// peach.save();
+
+/**************************************************************/
+
+/** UPDATE THE DB **/
+// Fruit.updateOne({ _id: "609d58f1f940510020987e97" }, { rating: 5 }, function (err) {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log('successfully updated the document');
+//   }
+// });
+
+/** CREATE FRUITS TO ADD TO DB**/
 // const kiwi = new Fruit({
 //   name: 'Kiwi',
 //   rating: 9,
@@ -41,6 +71,7 @@ const Fruit = mongoose.model('Fruit', fruitSchema);
 //   review: 'Crispy apples are the best'
 // });
 
+/** INSERT FRUITS INTO DB **/
 // Fruit.insertMany([kiwi, orange, banana, apple], function (err) {
 //   if (err) {
 //     console.log(err);
@@ -49,17 +80,18 @@ const Fruit = mongoose.model('Fruit', fruitSchema);
 //   }
 // });
 
-Fruit.find(function (err, fruits) {
-  if (err) {
-    console.log(err)
-  } else {
-    mongoose.connection.close();
-    fruits.forEach(fruit => console.log(fruit.name));
-  }
-});
+/** FETCH ALL FRUITS FROM DB AND LOG THEIR NAME **/
+// Fruit.find(function (err, fruits) {
+//   if (err) {
+//     console.log(err)
+//   } else {
+//     mongoose.connection.close();
+//     fruits.forEach(fruit => console.log(fruit.name));
+//   }
+// });
 
-// EXAMPLE FOR REFERENCE:
 
+/** CREATE A PERSON MODEL AND ADD TO PERSON COLLECTION **/
 // const personSchema = new mongoose.Schema({
 //   name: String,
 //   age: Number
